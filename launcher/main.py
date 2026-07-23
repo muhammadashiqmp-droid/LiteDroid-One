@@ -33,6 +33,18 @@ app.geometry("900x600")
 # Functions
 # -----------------------------
 
+def get_apps_manager():
+
+    apps_path = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "apps"
+    )
+
+    return APKManager(apps_path)
+
+
+
 def start_runtime():
 
     runtime = RuntimeManager()
@@ -47,17 +59,7 @@ def start_runtime():
 
 def scan_apps():
 
-    apps_path = os.path.join(
-        os.path.dirname(__file__),
-        "..",
-        "apps"
-    )
-
-
-    manager = APKManager(
-        apps_path
-    )
-
+    manager = get_apps_manager()
 
     apps = manager.scan_apks()
 
@@ -88,17 +90,7 @@ def import_apk():
 
     if apk_file:
 
-        apps_path = os.path.join(
-            os.path.dirname(__file__),
-            "..",
-            "apps"
-        )
-
-
-        manager = APKManager(
-            apps_path
-        )
-
+        manager = get_apps_manager()
 
         success = manager.import_apk(
             apk_file
@@ -107,9 +99,8 @@ def import_apk():
 
         if success:
 
-            apps_label.configure(
-                text="APK Imported Successfully"
-            )
+            scan_apps()
+
 
 
 # -----------------------------
