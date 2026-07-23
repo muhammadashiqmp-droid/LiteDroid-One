@@ -1,4 +1,5 @@
 import os
+import shutil
 
 
 class APKManager:
@@ -24,3 +25,25 @@ class APKManager:
                 apps.append(file)
 
         return apps
+
+
+    def import_apk(self, apk_path):
+
+        if not apk_path.lower().endswith(".apk"):
+
+            return False
+
+
+        destination = os.path.join(
+            self.apps_folder,
+            os.path.basename(apk_path)
+        )
+
+
+        shutil.copy2(
+            apk_path,
+            destination
+        )
+
+
+        return True

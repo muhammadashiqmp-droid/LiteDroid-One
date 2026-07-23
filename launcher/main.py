@@ -1,6 +1,7 @@
 import customtkinter as ctk
 import sys
 import os
+from tkinter import filedialog
 
 
 # Allow importing project modules
@@ -43,6 +44,7 @@ def start_runtime():
     )
 
 
+
 def scan_apps():
 
     apps_path = os.path.join(
@@ -74,6 +76,42 @@ def scan_apps():
     )
 
 
+
+def import_apk():
+
+    apk_file = filedialog.askopenfilename(
+        filetypes=[
+            ("Android APK", "*.apk")
+        ]
+    )
+
+
+    if apk_file:
+
+        apps_path = os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "apps"
+        )
+
+
+        manager = APKManager(
+            apps_path
+        )
+
+
+        success = manager.import_apk(
+            apk_file
+        )
+
+
+        if success:
+
+            apps_label.configure(
+                text="APK Imported Successfully"
+            )
+
+
 # -----------------------------
 # UI
 # -----------------------------
@@ -87,6 +125,7 @@ title = ctk.CTkLabel(
 title.pack(pady=30)
 
 
+
 subtitle = ctk.CTkLabel(
     app,
     text="Lightweight Android App Runner",
@@ -96,7 +135,6 @@ subtitle = ctk.CTkLabel(
 subtitle.pack()
 
 
-# Runtime status
 
 status_label = ctk.CTkLabel(
     app,
@@ -107,7 +145,6 @@ status_label = ctk.CTkLabel(
 status_label.pack(pady=20)
 
 
-# Installed apps title
 
 apps_title = ctk.CTkLabel(
     app,
@@ -118,7 +155,6 @@ apps_title = ctk.CTkLabel(
 apps_title.pack(pady=10)
 
 
-# Apps list
 
 apps_label = ctk.CTkLabel(
     app,
@@ -129,7 +165,6 @@ apps_label = ctk.CTkLabel(
 apps_label.pack()
 
 
-# Runtime button
 
 runtime_button = ctk.CTkButton(
     app,
@@ -139,10 +174,9 @@ runtime_button = ctk.CTkButton(
     command=start_runtime
 )
 
-runtime_button.pack(pady=25)
+runtime_button.pack(pady=20)
 
 
-# Scan apps button
 
 scan_button = ctk.CTkButton(
     app,
@@ -152,7 +186,20 @@ scan_button = ctk.CTkButton(
     command=scan_apps
 )
 
-scan_button.pack()
+scan_button.pack(pady=10)
+
+
+
+import_button = ctk.CTkButton(
+    app,
+    text="Import APK",
+    width=250,
+    height=45,
+    command=import_apk
+)
+
+import_button.pack(pady=10)
+
 
 
 # Start application
