@@ -3,7 +3,7 @@ import sys
 import os
 
 
-# Allow importing runtime module
+# Allow importing project modules
 sys.path.append(
     os.path.join(
         os.path.dirname(__file__),
@@ -11,7 +11,9 @@ sys.path.append(
     )
 )
 
+
 from runtime.runtime_manager import RuntimeManager
+from modules.apk_manager import APKManager
 
 
 # App settings
@@ -26,7 +28,10 @@ app.title("LiteDroid One")
 app.geometry("900x600")
 
 
-# Function for runtime button
+# -----------------------------
+# Functions
+# -----------------------------
+
 def start_runtime():
 
     runtime = RuntimeManager()
@@ -34,21 +39,54 @@ def start_runtime():
     status = runtime.get_status()
 
     status_label.configure(
-        text=status
+        text="Runtime Status: " + status
     )
 
 
-# Title
+def scan_apps():
+
+    apps_path = os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "apps"
+    )
+
+
+    manager = APKManager(
+        apps_path
+    )
+
+
+    apps = manager.scan_apks()
+
+
+    if apps:
+
+        apps_text = "\n".join(apps)
+
+    else:
+
+        apps_text = "No apps found"
+
+
+    apps_label.configure(
+        text=apps_text
+    )
+
+
+# -----------------------------
+# UI
+# -----------------------------
+
 title = ctk.CTkLabel(
     app,
     text="🚀 LiteDroid One",
     font=("Arial", 32, "bold")
 )
 
-title.pack(pady=40)
+title.pack(pady=30)
 
 
-# Subtitle
 subtitle = ctk.CTkLabel(
     app,
     text="Lightweight Android App Runner",
@@ -59,6 +97,7 @@ subtitle.pack()
 
 
 # Runtime status
+
 status_label = ctk.CTkLabel(
     app,
     text="Runtime Status: Unknown",
@@ -68,8 +107,31 @@ status_label = ctk.CTkLabel(
 status_label.pack(pady=20)
 
 
-# Button
-button = ctk.CTkButton(
+# Installed apps title
+
+apps_title = ctk.CTkLabel(
+    app,
+    text="Installed Apps:",
+    font=("Arial", 18, "bold")
+)
+
+apps_title.pack(pady=10)
+
+
+# Apps list
+
+apps_label = ctk.CTkLabel(
+    app,
+    text="No apps scanned",
+    font=("Arial", 16)
+)
+
+apps_label.pack()
+
+
+# Runtime button
+
+runtime_button = ctk.CTkButton(
     app,
     text="Start Android Runtime",
     width=250,
@@ -77,8 +139,22 @@ button = ctk.CTkButton(
     command=start_runtime
 )
 
-button.pack(pady=40)
+runtime_button.pack(pady=25)
 
 
-# Run application
+# Scan apps button
+
+scan_button = ctk.CTkButton(
+    app,
+    text="Scan Apps",
+    width=250,
+    height=45,
+    command=scan_apps
+)
+
+scan_button.pack()
+
+
+# Start application
+
 app.mainloop()
